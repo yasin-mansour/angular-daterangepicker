@@ -23,7 +23,7 @@
         clearable: '='
       },
       link: function($scope, element, attrs, modelCtrl) {
-        var _clear, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _validate, _validateMax, _validateMin, customOpts, el, opts;
+        var _clear, _init, _initBoundaryField, _mergeOpts, _picker, _setDatePoint, _setEndDate, _setStartDate, _setMaxSpan, _validate, _validateMax, _validateMin, customOpts, el, opts;
         _mergeOpts = function() {
           var extend, localeExtend;
           localeExtend = angular.extend.apply(angular, Array.prototype.slice.call(arguments).map(function(opt) {
@@ -64,6 +64,12 @@
           opts.endDate = m;
           return _picker.setEndDate(m);
         });
+        _setMaxSpan = function (maxSpan){
+          if(maxSpan && Object.keys(maxSpan).length > 0){
+              _picker.maxSpan = maxSpan;
+          }
+            return _picker;
+        };
         _validate = function(validator) {
           return function(boundary, actual) {
             if (boundary && actual) {
@@ -100,6 +106,7 @@
           if (modelCtrl.$modelValue && modelCtrl.$modelValue.startDate) {
             _setStartDate(modelCtrl.$modelValue.startDate);
             _setEndDate(modelCtrl.$modelValue.endDate);
+            _setMaxSpan(modelCtrl.$modelValue.maxSpan);
           } else {
             _clear();
           }
@@ -158,6 +165,9 @@
         $scope.$watch('model.endDate', function(n) {
           return _setEndDate(n);
         });
+          $scope.$watch('model.maxSpan', function(n) {
+              return _setMaxSpan(n);
+          });
         _initBoundaryField = function(field, validator, modelField, optName) {
           if (attrs[field]) {
             modelCtrl.$validators[field] = function(value) {
